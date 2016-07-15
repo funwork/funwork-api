@@ -33,15 +33,15 @@ public class Department implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    public Long id;
+    private Long id;
 
     @NotNull
-    public String name;
+    private String name;
 
     @ManyToOne
     @JoinColumn(name = "parent_id")
     @JsonManagedReference
-    public Department parentDept;
+    private Department parentDept;
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
