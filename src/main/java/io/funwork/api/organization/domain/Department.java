@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -21,6 +22,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,6 +30,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
+@EqualsAndHashCode
 @NoArgsConstructor
 public class Department implements Serializable {
 
@@ -68,5 +71,14 @@ public class Department implements Serializable {
 
     private boolean isNotExistChildDepartment(Department department) {
         return department != null && !department.getChildDept().contains(this);
+    }
+
+    public List<Person> getPersons() {
+        return this.getDepartmentPersons()
+                .stream()
+                .parallel()
+                .filter(departmentPerson -> departmentPerson.getPerson() != null)
+                .map(DepartmentPerson::getPerson)
+                .collect(Collectors.toList());
     }
 }

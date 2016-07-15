@@ -3,6 +3,7 @@ package io.funwork.api.organization.domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,9 +15,14 @@ import javax.validation.constraints.Size;
 
 import io.funwork.api.organization.domain.support.command.PersonCommand;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
-@Data
+@Getter
+@Setter
+@ToString
 public class Person implements Serializable {
 
     @Id
@@ -63,6 +69,19 @@ public class Person implements Serializable {
         person.setPosition(personCommand.getPosition());
         person.setSecurityGrade(SecurityGrade.NORMAL);
         return person;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Person person= (Person) o;
+        return Objects.equals(id, person.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
 }

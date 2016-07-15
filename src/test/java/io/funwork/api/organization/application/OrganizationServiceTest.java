@@ -48,6 +48,7 @@ public class OrganizationServiceTest {
     Person givenPerson;
     Person expectPerson;
     Person treeExpectPerson;
+    DepartmentPerson expectDepartmentPerson ;
 
     @Before
     public void setUp() {
@@ -55,6 +56,7 @@ public class OrganizationServiceTest {
         givenPerson = personFixture.build();
         expectPerson = personFixture.withId(1L).build();
         treeExpectPerson = createTreePerson();
+        expectDepartmentPerson = createExpectDepartmentPerson();
     }
 
     @Test
@@ -62,8 +64,8 @@ public class OrganizationServiceTest {
         assertNotNull(organizationService);
     }
 
-    @Test
-    public void test_add_person() throws Exception {
+    @Test(expected = IllegalArgumentException.class)
+    public void test_add_person_not_dept() throws Exception {
         //given
         PersonCommand personCommand = createPersonCommandFixture();
         when(personRepository.save(givenPerson)).thenReturn(expectPerson);
@@ -84,13 +86,7 @@ public class OrganizationServiceTest {
         personCommand.setDeptId(1L);
         when(personRepository.save(givenPerson)).thenReturn(expectPerson);
 
-        Department department = new Department();
-        department.setId(1L);
-
-        DepartmentPerson expectDepartmentPerson = new DepartmentPerson();
-        expectDepartmentPerson.setId(1L);
-        expectDepartmentPerson.setDepartment(department);
-        expectDepartmentPerson.setPerson(expectPerson);
+        DepartmentPerson expectDepartmentPerson = createExpectDepartmentPerson();
 
         when(departmentPersonRepository.save(any(DepartmentPerson.class))).thenReturn(expectDepartmentPerson);
 
@@ -101,6 +97,30 @@ public class OrganizationServiceTest {
         verify(departmentPersonRepository).save(any(DepartmentPerson.class));
         assertThat(savePerson.getId(), is(expectPerson.getId()));
         assertThat(savePerson.getDepartmentPersons().size(), is(1));
+    }
+
+    @Test
+    public void test_update_person() throws Exception {
+
+        //given
+
+        PersonCommand personCommand = createPersonCommandFixture();
+        personCommand.setDeptId(1L);
+        personCommand.setPersonId(1L);
+        personCommand.setSecurityGrade(SecurityGrade.ADMIN);
+
+        givenPerson.setId(1L);
+        givenPerson.setSecurityGrade(SecurityGrade.ADMIN);
+        expectPerson.setSecurityGrade(SecurityGrade.ADMIN);
+
+        when(personRepository.save(givenPerson)).thenReturn(expectPerson);
+        when(departmentPersonRepository.save(any(DepartmentPerson.class))).thenReturn(expectDepartmentPerson);
+
+        //when
+        Person savePerson = organizationService.savePerson(personCommand);
+
+        //then
+        assertThat(savePerson.getSecurityGrade(), is(SecurityGrade.ADMIN));
     }
 
     @Test
@@ -202,5 +222,17 @@ public class OrganizationServiceTest {
 
         pDepartment.setChildDept(childDepts);
         return cDepartment;
+    }
+
+    private DepartmentPerson createExpectDepartmentPerson() {
+
+        Department department = new Department();
+        department.setId(1L);
+
+        DepartmentPerson expectDepartmentPerson = new DepartmentPerson();
+        expectDepartmentPerson.setId(1L);
+        expectDepartmentPerson.setDepartment(department);
+        expectDepartmentPerson.setPerson(expectPerson);
+        return expectDepartmentPerson;
     }
 }

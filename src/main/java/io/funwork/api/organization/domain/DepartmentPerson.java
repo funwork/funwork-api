@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import io.funwork.api.organization.domain.support.command.PersonCommand;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Getter @Setter
+@EqualsAndHashCode
 public class DepartmentPerson {
 
     public DepartmentPerson(Person person, Department department){

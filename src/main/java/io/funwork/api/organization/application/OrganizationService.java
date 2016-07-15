@@ -27,21 +27,22 @@ public class OrganizationService {
 
     @Transactional
     public Person savePerson(PersonCommand personCommand) {
-
         Person person = Person.createPerson(personCommand);
         person = personRepository.save(person);
-
-        //부서등록
-        if (personCommand.getDeptId() != null) {
-
-            Department department = new Department();
-            department.setId(personCommand.getDeptId());
-
-            DepartmentPerson departmentPerson = saveDepartmentPerson(person, department);
-            person.addDepartment(departmentPerson);
-        }
-
+        person.addDepartment(addDepartment(personCommand, person));
         return person;
+    }
+
+    private DepartmentPerson addDepartment(PersonCommand personCommand, Person person) {
+        if (isNotExistDeptId(personCommand)) {
+            DepartmentPerson departmentPerson = saveDepartmentPerson(person, personCommand.getDeptId());
+            return departmentPerson;
+        }
+        throw new IllegalArgumentException("사용자 등록시 부서 정보는 필수값 입니다");
+    }
+
+    private boolean isNotExistDeptId(PersonCommand personCommand) {
+        return personCommand.getDeptId() != null;
     }
 
     @Transactional
@@ -65,12 +66,7 @@ public class OrganizationService {
 
     private List<OrganizationTreeDto> childs(Department department, OrganizationTreeDto tree) {
         List<OrganizationTreeDto> childs = new ArrayList<>();
-
-        department.getDepartmentPersons()
-                .stream()
-                .filter(departmentPerson -> departmentPerson.getPerson() != null)
-                .forEach(departmentPerson -> childs.add(new OrganizationTreeDto(departmentPerson.getPerson(), department.getId())));
-
+        department.getPersons().forEach(person -> childs.add(new OrganizationTreeDto(person, department.getId())));
         if (tree != null) childs.add(tree);
         return childs;
     }
@@ -83,7 +79,9 @@ public class OrganizationService {
         return null;
     }
 
-    private DepartmentPerson saveDepartmentPerson(Person person, Department department) {
+    private DepartmentPerson saveDepartmentPerson(Person person, Long deptId) {
+        Department department = new Department();
+        department.setId(deptId);
         DepartmentPerson departmentPerson = new DepartmentPerson(person, department);
         return departmentPersonRepository.save(departmentPerson);
     }
