@@ -1,4 +1,4 @@
-package io.funwork.api.organization.repository;
+package io.funwork.api.organization.infrastructure.jpa;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

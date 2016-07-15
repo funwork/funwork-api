@@ -1,7 +1,7 @@
-package io.funwork.api.organization.controller;
+package io.funwork.api.organization.interfaces.rest;
 
 import io.funwork.api.organization.domain.support.dto.OrganizationTreeDto;
-import io.funwork.api.organization.service.OrganizationService;
+import io.funwork.api.organization.application.OrganizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -1,17 +1,18 @@
-package io.funwork.api.organization.service;
+package io.funwork.api.organization.application;
 
+import io.funwork.api.organization.application.OrganizationService;
 import io.funwork.api.organization.domain.Department;
 import io.funwork.api.organization.domain.DepartmentPerson;
 import io.funwork.api.organization.domain.Person;
 import io.funwork.api.organization.domain.SecurityGrade;
 import io.funwork.api.organization.domain.support.command.PersonCommand;
 import io.funwork.api.organization.domain.support.dto.OrganizationTreeDto;
-import io.funwork.api.organization.exception.NotFoundDepartment;
-import io.funwork.api.organization.exception.NotFoundPerson;
+import io.funwork.api.organization.application.exception.NotFoundDepartment;
+import io.funwork.api.organization.application.exception.NotFoundPerson;
 import io.funwork.api.organization.fixture.DepartmentFixture;
 import io.funwork.api.organization.fixture.PersonFixture;
-import io.funwork.api.organization.repository.DepartmentPersonRepository;
-import io.funwork.api.organization.repository.PersonRepository;
+import io.funwork.api.organization.infrastructure.jpa.DepartmentPersonRepository;
+import io.funwork.api.organization.infrastructure.jpa.PersonRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;

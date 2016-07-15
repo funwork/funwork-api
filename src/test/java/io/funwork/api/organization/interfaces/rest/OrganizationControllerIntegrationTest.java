@@ -1,4 +1,4 @@
-package io.funwork.api.organization.controller;
+package io.funwork.api.organization.interfaces.rest;
 
 import com.jayway.restassured.RestAssured;
 import io.funwork.FunworkApiApplicationTests;

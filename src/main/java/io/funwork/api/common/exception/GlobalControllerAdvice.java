@@ -1,7 +1,7 @@
 package io.funwork.api.common.exception;
 
-import io.funwork.api.organization.exception.NotFoundDepartment;
-import io.funwork.api.organization.exception.NotFoundPerson;
+import io.funwork.api.organization.application.exception.NotFoundDepartment;
+import io.funwork.api.organization.application.exception.NotFoundPerson;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;

@@ -1,5 +1,8 @@
-package io.funwork.api.organization.repository;
+package io.funwork.api.organization.infrastructure.jpa;
 
+import io.funwork.api.organization.infrastructure.jpa.DepartmentPersonRepository;
+import io.funwork.api.organization.infrastructure.jpa.DepartmentRepository;
+import io.funwork.api.organization.infrastructure.jpa.PersonRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
