@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrganizationService {
@@ -34,15 +35,11 @@ public class OrganizationService {
     }
 
     private DepartmentPerson addDepartment(PersonCommand personCommand, Person person) {
-        if (isNotExistDeptId(personCommand)) {
+        if (personCommand.isExistDeptId()) {
             DepartmentPerson departmentPerson = saveDepartmentPerson(person, personCommand.getDeptId());
             return departmentPerson;
         }
         throw new IllegalArgumentException("사용자 등록시 부서 정보는 필수값 입니다");
-    }
-
-    private boolean isNotExistDeptId(PersonCommand personCommand) {
-        return personCommand.getDeptId() != null;
     }
 
     @Transactional
@@ -65,8 +62,11 @@ public class OrganizationService {
     }
 
     private List<OrganizationTreeDto> childs(Department department, OrganizationTreeDto tree) {
-        List<OrganizationTreeDto> childs = new ArrayList<>();
-        department.getPersons().forEach(person -> childs.add(new OrganizationTreeDto(person, department.getId())));
+        List<OrganizationTreeDto> childs = department.getPersons()
+            .stream()
+            .map(person -> new OrganizationTreeDto(person, department.getId()))
+            .collect(Collectors.toList());
+
         if (tree != null) childs.add(tree);
         return childs;
     }

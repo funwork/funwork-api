@@ -12,4 +12,8 @@ public class PersonCommand {
     private String position;
     private SecurityGrade securityGrade;
     private Long deptId;
+
+    public boolean isExistDeptId() {
+        return getDeptId() != null;
+    }
 }
